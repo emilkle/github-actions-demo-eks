@@ -1,14 +1,14 @@
 locals {
   workspace_suffix = terraform.workspace == "default" ? "" : "${terraform.workspace}"
-  rg_name = terraform.workspace == "default" ? "${var.rg_name}" : "${var.rg_name}-${local.workspace_suffix}"
-  sa_name = terraform.workspace == "default" ? "${var.sa_name}" : "${var.sa_name}${local.workspace_suffix}"
-  web_suffix ="<h1>${terraform.workspace}</h1>"
+  rg_name          = terraform.workspace == "default" ? "${var.rg_name}" : "${var.rg_name}-${local.workspace_suffix}"
+  sa_name          = terraform.workspace == "default" ? "${var.sa_name}" : "${var.sa_name}${local.workspace_suffix}"
+  web_suffix       = "<h1>${terraform.workspace}</h1>"
 }
 
 resource "random_string" "random_string" {
-  length = 8
+  length  = 8
   special = false
-  upper = false
+  upper   = false
 }
 
 resource "azurerm_resource_group" "rg_web" {
@@ -17,24 +17,24 @@ resource "azurerm_resource_group" "rg_web" {
 }
 
 resource "azurerm_storage_account" "sa_web" {
-    name = "${lower(local.sa_name)}${random_string.random_string.result}"
-    resource_group_name = azurerm_resource_group.rg_web.name
-    location = azurerm_resource_group.rg_web.location
-    account_tier = "Standard"
-    account_replication_type = "LRS"
+  name                     = "${lower(local.sa_name)}${random_string.random_string.result}"
+  resource_group_name      = azurerm_resource_group.rg_web.name
+  location                 = azurerm_resource_group.rg_web.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 
-    static_website {
-        index_document = var.index_document
-    }
+  static_website {
+    index_document = var.index_document
+  }
 }
 
 resource "azurerm_storage_blob" "index_html" {
-  name = var.index_document
-  storage_account_name = azurerm_storage_account.sa_web.name
+  name                   = var.index_document
+  storage_account_name   = azurerm_storage_account.sa_web.name
   storage_container_name = "$web"
-  type = "Block"
-  content_type = "text/html"
-  source_content = "${var.source_content}${local.web_suffix}"
+  type                   = "Block"
+  content_type           = "text/html"
+  source_content         = "${var.source_content}${local.web_suffix}"
 }
 
 output "primary_web_endpoint" {
