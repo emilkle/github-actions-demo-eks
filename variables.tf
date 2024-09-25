@@ -19,7 +19,7 @@ variable "location" {
 variable "source_content" {
     type = string
     description = "(optional) describe your variable"
-    default = "<h1>A web page created with Terraform</h1>"
+    default = "<h1>A web page created with Terraform - CI/CD</h1>"
 }
 
 variable "index_document" {
