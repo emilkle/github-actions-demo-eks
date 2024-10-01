@@ -26,6 +26,8 @@ resource "azurerm_storage_account" "sa_web" {
   static_website {
     index_document = var.index_document
   }
+
+   min_tls_version = "TLS1_2"
 }
 
 resource "azurerm_storage_blob" "index_html" {
