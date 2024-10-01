@@ -2,8 +2,6 @@ name: Validate infrastructure
 
 on:
   push:
-    branches-ignore:
-      - main
     paths:
       - 'github-actions-demo-eks/**'
 
